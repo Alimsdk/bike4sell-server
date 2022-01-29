@@ -17,6 +17,7 @@ async function run(){
         const bikesCollection=database.collection('bikes');
         const usersCollection=database.collection('users');
         const ordersCollection=database.collection('orders');
+        const feedbackCollection=database.collection('feedback');
 
 
         app.get('/bikes',async(req,res)=>{
@@ -99,6 +100,20 @@ async function run(){
            const query={_id:ObjectId(`${key}`)}
            const result=await ordersCollection.deleteOne(query);
            res.json(result);
+        })
+
+        app.post('/feedbacks',async(req,res)=>{
+            const feedback=req.body;
+            
+            const userRating=await feedbackCollection.insertOne(feedback);
+            res.json(userRating)
+              
+        })
+        
+        app.get('/feedbacks',async(req,res)=>{
+            const feedbacks=feedbackCollection.find({});
+            const result=await feedbacks.toArray();
+            res.json(result);
         })
     }
     
